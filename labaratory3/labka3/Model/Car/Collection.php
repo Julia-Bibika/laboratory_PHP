@@ -31,7 +31,7 @@ class Collection implements CarCollectionInterface
     public function removeCarByCode(int $id): CarCollectionInterface
     {
         for ($i = 0; $i < count($this->carArr); $i++) {
-            if ($this->carArr[$i]['id'] == $id) {
+            if ($this->carArr[$i]->id == $id) {
                 unset($this->carArr[$i]);
             }
         }

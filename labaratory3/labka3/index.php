@@ -19,11 +19,13 @@ $car3 = new Car( 3,'Візничук Андрій Андрійович',"Lexus",
 
 $carCollections = new Collection([$car1,$car2,$car3]);
 $saveCarCollection = new Repository();
-var_dump($saveCarCollection->loadDataFromFile('ok'));
+
+$saveCarCollection->createNewFile('cars');
+$saveCarCollection->storeDataToFile($carCollections, 'cars');
+var_dump($carCollections);
+echo '<br> ------------------ <br>';
+
 $carCollections->removeCarByCode(1);
 
+var_dump($carCollections);
 // збереження/завантаження даних з файлів.
-
-$carRepository = new Repository();
-$carRepository->storeDataToFile($carCollections, 'file.txt');
-$carCollections = $carRepository->loadDataFromFile('file.txt');

@@ -27,10 +27,10 @@ class Repository
         $dataStr = '';
         for($i = 0; $i < count($carCollection->getCarArr()); $i++){
             $dataStr .= $carCollection->getCarArr()[$i]->getId() . ' ' .
-                $carCollection->getCarArr()[$i]->getName() . ' ' .
-                $carCollection->getCarArr()[$i]->getStaffNumber() . ' ' .
-                $carCollection->getCarArr()[$i]->getBranch() . ' ' .
-                $carCollection->getCarArr()[$i]->getAddress() . "\n";
+                $carCollection->getCarArr()[$i]->getPIB() . ' ' .
+                $carCollection->getCarArr()[$i]->getMark() . ' ' .
+                $carCollection->getCarArr()[$i]->getNumber_car() . ' ' .
+                $carCollection->getCarArr()[$i]->getColor() . "\n";
         }
         file_put_contents("./$fileName.txt", "$dataStr", FILE_APPEND);
     }
