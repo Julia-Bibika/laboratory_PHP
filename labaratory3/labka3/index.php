@@ -1,150 +1,29 @@
 <?php
+// Клас для зберігання та редагування колекції об'єктів, виводу даних на сторінку,
+use Model\Car;
+use Model\Car\Collection;
+use Model\Car\Repository;
 
-include "Car.php";
-include "CarsCollection.php";
-
-if (!isset($_SESSION)) {
-    session_start();
+function myAutoloader($class_name)
+{
+    if (!class_exists($class_name)) {
+        include $class_name . '.php';
+    }
 }
 
-if (empty($_SESSION['Cars'])) {
-    $_SESSION['Cars'] = new CarsCollection();
-    $_SESSION['Cars']->defaultCars();
-}
+spl_autoload_register('myAutoloader');
 
-$action = $_POST['action'];
+$car1 = new Car( 1,'Бартків Олександр Михайлович',"Audi","BB2588BA","red");
+$car2 = new Car( 2,'Кучер Іван Андрійович',"BMW","AA6126ME","black");
+$car3 = new Car( 3,'Візничук Андрій Андрійович',"Lexus","AK9265AK","blue");
 
-if ($action == 'add') {
-    if (DAI::validationDataCars($_POST)) {
-        $_SESSION['Cars']->addCar(
-            new DAI(5, $_POST)
-        );
-    }
-} elseif ($action == 'edit') {
-    if (DAI::validationDataCars($_POST)) {
-        $_SESSION['Cars']->editCar(
-            $_POST
-        );
-    }
-} elseif ($action == 'filter') {
-    echo $_SESSION['Cars']->displayFilteredCars($_POST['request']);
-} elseif ($action == 'savefile') {
-    $_SESSION['Cars']->saveCars();
-} elseif ($action == 'loadfile') {
-    $_SESSION['Cars']->loadCars();
-}
+$carCollections = new Collection([$car1,$car2,$car3]);
+$saveCarCollection = new Repository();
+var_dump($saveCarCollection->loadDataFromFile('ok'));
+$carCollections->removeCarByCode(1);
 
-echo $_SESSION['Cars']->displayCars();
-?>
-<br>
+// збереження/завантаження даних з файлів.
 
-<button onclick="ShowAddForm()"> ADD</button>
-<button onclick="ShowEditForm()"> EDIT</button>
-<button onclick="ShowFilterForm()"> FILTER</button>
-
-<br>
-
-<form action='<?= $_SERVER['PHP_SELF'] ?>' method='post' id='addForm'>
-    ADD <br>
-    <label> name:
-        <input type='text' name='name'>
-    </label><br>
-    <label> phone:
-        <input type='text' name='phone'>
-    </label><br>
-    <label> address:
-        <input type='text' name='address'>
-    </label><br>
-    <label> time:
-        <input type='number' name='time'>
-    </label><br>
-    <label> bill:
-        <input type='number' name='bill'>
-    </label><br>
-    <input type='hidden' name='action' value='add'>
-    <input type='submit' value='add'>
-</form>
-
-<br>
-
-<form action='<?= $_SERVER['PHP_SELF']?>' method='post' id='addForm'>
-    ADD <br>
-    <label> PIB:
-        <input type='text' name='PIB'>
-    </label><br>
-    <label> mark:
-        <input type='text' name='mark'>
-    </label><br>
-    <label> number_car:
-        <input type='text' name='number_car'>
-    </label><br>
-    <label> color:
-        <input type='text' name='color'>
-    </label><br>
-    <input type='hidden' name='action' value='add'>
-    <input type='submit'>
-</form>
-
-<br>
-<form action='<?= $_SERVER['PHP_SELF']?>' method='post' id='editForm'>
-    EDIT <br>
-    <label> id:
-        <input type='number' name='id'>
-    </label><br>
-    <label> PIB:
-        <input type='text' name='PIB'>
-    </label><br>
-    <label> mark:
-        <input type='text' name='mark'>
-    </label><br>
-    <label> number_car:
-        <input type='text' name='number_car'>
-    </label><br>
-    <label> color:
-        <input type='text' name='color'>
-    </label><br>
-    <input type='hidden' name='action' value='edit'>
-    <input type='submit'>
-</form>
-
-<br>
-
-<form action='<?= $_SERVER['PHP_SELF']?>' method='post' id='filterForm'>
-    Filter <br>
-    <label> request:
-        <input type='text' name='request'>
-    </label><br>
-    <input type='hidden' name='action' value='filter'>
-    <input type='submit'>
-</form>
-
-<form action='<?= $_SERVER['PHP_SELF'] ?>' method='post' id='savefile'>
-    <input type='hidden' name='action' value='savefile'>
-    <input type='submit' value='Save to file'>
-</form>
-
-<form action='<?= $_SERVER['PHP_SELF'] ?>' method='post' id='loadfile'>
-    <input type='hidden' name='action' value='loadfile'>
-    <input type='submit' value='Upload from file'>
-</form>
-
-<style>
-    table,td {
-        border: 1px solid black;
-        border-collapse: collapse;
-    }
-    th{
-        border: 1px solid black;
-    }
-</style>
-<script>
-    function ShowAddForm() {
-        document.querySelector('#addForm').style.display = 'inline';
-    }
-    function ShowEditForm() {
-        document.querySelector('#editForm').style.display = 'inline';
-    }
-    function ShowFilterForm() {
-        document.querySelector('#filterForm').style.display = 'inline';
-    }
-</script>
+$carRepository = new Repository();
+$carRepository->storeDataToFile($carCollections, 'file.txt');
+$carCollections = $carRepository->loadDataFromFile('file.txt');
