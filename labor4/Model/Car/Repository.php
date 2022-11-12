@@ -27,11 +27,11 @@ class Repository
             'PIB = ' . $otherPIB . ', ' .
             'mark = ' . $otherMark . ', ' .
             'number_car = ' . $otherNumber_car . ', ' .
-            'color = ' . $otherColor . ' , ' .
-            'WHERE id = ' . $otherId);
+            'color = ' . $otherColor . '  ' .
+            'WHERE id = ' . $otherId );
     }
 
-    public function deleteXa($id){
+    public function deleteCars($id){
         return $this->dbh->query("DELETE FROM cars WHERE id = " . $id);
     }
 //    public function createNewFile(string $fileName){
