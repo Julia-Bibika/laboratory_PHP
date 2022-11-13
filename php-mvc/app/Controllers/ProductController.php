@@ -87,17 +87,20 @@ class ProductController extends Controller
      * 
      * @return void
      */
-    public function addAction(): void
+    public function addAction()
     {
         $model = $this->getModel('Product');
         $this->set("title", "Додавання товару");
-        if ($values = $model->getPostValues()) {
-            $model->addItem($values);
-        }
-        $this->renderLayout();
-    }
+            $values = $model->getPostValues();
+            if ($values) {
+                $newProduct = $model->addItem($values);
+            }
+            $this->renderLayout();
 
-    /**
+        }
+
+
+        /**
      * @return array
      */
     public function getSortParams(): array
